@@ -3,10 +3,8 @@ if (!defined('ABSPATH')) exit;
 
 class GRF_Provider_WPCReviews extends GRF_Provider {
     public function get_reviews() {
-        // WP Customer Reviews stores data in custom SQL tables, not standard WP posts/comments.
-        // For V1 of this plugin, we return an empty array or basic logic.
-        // A full SQL query to `wp_wpcreviews` would go here.
-        
-        return []; 
+        // Placeholder: WP Customer Reviews requires complex custom SQL logic.
+        // We return an empty array to prevent the plugin from crashing if this is selected.
+        return [];
     }
 }

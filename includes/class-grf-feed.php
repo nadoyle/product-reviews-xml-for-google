@@ -18,12 +18,10 @@ class GRF_Feed {
     public function render_feed() {
         if (get_query_var('grf_feed') != 1) return;
 
-        // Disable Caching
         if (!defined('DONOTCACHEPAGE')) define('DONOTCACHEPAGE', true);
         
         header('Content-Type: application/xml; charset=UTF-8');
         
-        // Check Internal Transient Cache
         $cached = get_transient('grf_xml_feed_cache');
         if ($cached) { echo $cached; exit; }
 
@@ -34,19 +32,11 @@ class GRF_Feed {
     }
 
     private function generate_xml() {
-        // Select Provider
         $provider_option = get_option('grf_provider', 'woo');
-        
         switch ($provider_option) {
-            case 'wpcreviews':
-                $provider = new GRF_Provider_WPCReviews();
-                break;
-            case 'sitereviews':
-                $provider = new GRF_Provider_SiteReviews();
-                break;
-            default:
-                $provider = new GRF_Provider_Woo();
-                break;
+            case 'wpcreviews': $provider = new GRF_Provider_WPCReviews(); break;
+            case 'sitereviews': $provider = new GRF_Provider_SiteReviews(); break;
+            default: $provider = new GRF_Provider_Woo(); break;
         }
 
         $reviews = $provider->get_reviews();
@@ -54,9 +44,7 @@ class GRF_Feed {
         ob_start();
         echo '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         ?>
-<feed xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
- xmlns:p="http://base.google.com/ns/1.0"
- name="<?php echo esc_attr(get_bloginfo('name')); ?> Product Reviews">
+<feed xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" xmlns:p="http://base.google.com/ns/1.0" name="<?php echo esc_attr(get_bloginfo('name')); ?> Product Reviews">
     <version>2.3</version>
     <aggregator><name>WooCommerce</name></aggregator>
     <publisher><name><?php echo esc_html(get_bloginfo('name')); ?></name></publisher>

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Google Merchant Center Reviews XML generator
  * Description: Generates a Google Merchant Center XML feed for WooCommerce reviews. Supports standard Woo reviews, YITH, Judge.me, Yotpo, and more.
- * Version: 1.3.1
+ * Version: 1.4.0
  * Author: TetherTies, LLC
  * Author URI: https://tetherties.com
  */
@@ -10,7 +10,7 @@
 if (!defined('ABSPATH')) exit;
 
 define('GRF_PATH', plugin_dir_path(__FILE__));
-define('GRF_VERSION', '1.3.1');
+define('GRF_VERSION', '1.4.0');
 
 // Load Core Classes
 require_once GRF_PATH . 'includes/class-grf-admin.php';
