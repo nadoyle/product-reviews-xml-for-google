@@ -36,11 +36,13 @@ class GRF_Admin {
 
     public function sanitize_slug($input) {
         $new_slug = preg_replace('/[^a-z0-9\.\-\_]/i', '', $input);
-        return $new_slug ?: 'google-reviews-xml';
+        // Updated fallback
+        return $new_slug ?: 'google-merchant-center-reviews-xml';
     }
 
     public function settings_page() {
-        $slug = get_option('grf_feed_slug', 'google-reviews-xml');
+        // Updated default
+        $slug = get_option('grf_feed_slug', 'google-merchant-center-reviews-xml');
         $feed_url = site_url('/' . $slug);
         ?>
         <div class="wrap">
@@ -81,9 +83,11 @@ class GRF_Admin {
                         <th scope="row">Refresh Rate</th>
                         <td>
                             <select name="grf_refresh_rate">
+                                <option value="604800" <?php selected(get_option('grf_refresh_rate'), 604800); ?>>Weekly (Recommended)</option>
+                                <option value="86400" <?php selected(get_option('grf_refresh_rate'), 86400); ?>>Daily</option>
                                 <option value="3600" <?php selected(get_option('grf_refresh_rate'), 3600); ?>>Hourly</option>
-                                <option value="86400" <?php selected(get_option('grf_refresh_rate'), 86400); ?>>Daily (Recommended)</option>
                             </select>
+                            <p class="description">We cache the feed to reduce server load.</p>
                         </td>
                     </tr>
                     <tr><th colspan="2"><h3>Product Identifiers</h3></th></tr>
