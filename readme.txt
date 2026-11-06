@@ -2,8 +2,8 @@
 Contributors: tetherties
 Tags: woocommerce, google merchant center, product reviews, xml feed, google shopping
 Requires at least: 5.0
-Tested up to: 6.7
-Stable tag: 2.0.6
+Tested up to: 6.9
+Stable tag: 2.0.8
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -23,7 +23,7 @@ This plugin generates a strictly formatted XML feed of your product reviews that
 
 **Performance & Limits:**
 By default, this plugin includes your 2,500 most recent reviews. This safety cap ensures that generating the XML file does not crash your server due to memory exhaustion.
-*   *Developers:* You can increase or remove this limit using the `grf_review_limit` filter.
+*   *Developers:* You can increase or remove this limit using the `prxml_review_limit` filter.
 
 == Installation ==
 
@@ -53,6 +53,16 @@ Go to the plugin settings and click "Save Changes". This will flush your permali
 
 == Changelog ==
 
+= 2.0.8 =
+*   Fixed sanitization to use sanitize_title_with_dashes() as recommended by WordPress.org review.
+*   Improved DONOTCACHEPAGE constant scoping to only affect feed rendering.
+*   Added preg_quote() for regex security in rewrite rules.
+*   Added WooCommerce dependency check with admin notice.
+*   Fixed all escaping to use esc_html_e() instead of _e().
+*   Changed prefix from 'grf' to 'prxml' (5 characters) to meet WordPress requirements.
+*   Moved JavaScript to external file with proper wp_enqueue_script().
+*   Added comprehensive error handling and PHPDoc blocks.
+
 = 2.0.6 =
 *   Increased safety limit to 2,500 reviews (Generous Free Tier).
 
@@ -79,3 +89,8 @@ Go to the plugin settings and click "Save Changes". This will flush your permali
 
 = 2.0.6 =
 Increased default review limit to 2,500 for better free tier support.
+
+= 2.0.7 =
+* Security hardening: Added strict escaping and sanitization.
+* Updated code structure with unique prefixes to prevent conflicts.
+* Moved inline JavaScript to external assets file.
