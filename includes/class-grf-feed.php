@@ -11,6 +11,7 @@ class GRF_Feed {
     public function add_query_var($vars) { $vars[] = 'grf_feed'; return $vars; }
 
     public function rewrite() {
+        // Correct Slug
         $slug = get_option('grf_feed_slug', 'google-merchant-center-reviews-xml');
         add_rewrite_rule('^' . $slug . '/?$', 'index.php?grf_feed=1', 'top');
     }
@@ -27,6 +28,7 @@ class GRF_Feed {
 
         $xml = $this->generate_xml();
         
+        // Weekly Default
         set_transient('grf_xml_feed_cache', $xml, (int)get_option('grf_refresh_rate', 604800));
         echo $xml;
         exit;

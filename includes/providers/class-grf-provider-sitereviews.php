@@ -19,18 +19,12 @@ class GRF_Provider_SiteReviews extends GRF_Provider {
             $product_id = get_post_meta($r->ID, '_assigned_to', true);
             $product_data = $this->get_product_identifiers($product_id);
             if (!$product_data) continue;
-
             $rating = get_post_meta($r->ID, '_rating', true);
-
             $data[] = [
-                'id' => $r->ID,
-                'content' => $r->post_content,
-                'rating' => (int) $rating,
-                'reviewer_name' => get_post_meta($r->ID, '_author', true) ?: 'Anonymous',
-                'is_verified' => false,
-                'timestamp' => get_the_date('Y-m-d\TH:i:s\Z', $r->ID),
-                'url' => get_permalink($r->ID),
-                'product_name' => $product_data['name'],
+                'id' => $r->ID, 'content' => $r->post_content,
+                'rating' => (int) $rating, 'reviewer_name' => get_post_meta($r->ID, '_author', true) ?: 'Anonymous',
+                'is_verified' => false, 'timestamp' => get_the_date('Y-m-d\TH:i:s\Z', $r->ID),
+                'url' => get_permalink($r->ID), 'product_name' => $product_data['name'],
                 'product_url' => $product_data['url'],
                 'identifiers' => [
                     'sku' => $product_data['sku'], 'brand' => $product_data['brand'],
