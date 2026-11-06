@@ -52,7 +52,6 @@ class GRF_Admin {
         $slug = get_option('grf_feed_slug', 'google-merchant-center-reviews-xml');
         $feed_url = site_url('/' . $slug);
         
-        // Force default to 604800 (Weekly) if database is empty
         $current_refresh = get_option('grf_refresh_rate', 604800);
         ?>
         <div class="wrap">
@@ -70,7 +69,7 @@ class GRF_Admin {
                 <!-- SPONSOR CARD -->
                 <div class="card" style="max-width: 800px; padding: 20px; margin-bottom: 20px; border-left: 4px solid #ff9900; background: #fffdf8;">
                     <h3 style="margin-top:0;"><?php _e('🔌 Brought to you by TetherTies', 'product-reviews-xml-for-google'); ?></h3>
-                    <p><?php _e('This plugin is free, maintained by the team at <strong>TetherTies</strong>.', 'product-reviews-xml-for-google'); ?></p>
+                    <p><?php _e('This free plugin is maintained by TetherTies, the #1 security solution that stops adapters and dongles from walking away. Protect your conference room equipment in seconds with our pre-assembled, anti-theft cable tethers.', 'product-reviews-xml-for-google'); ?></p>
                     <p><a href="https://tetherties.com/?utm_source=plugin&utm_medium=admin_banner" target="_blank" class="button button-secondary"><?php _e('Visit TetherTies.com', 'product-reviews-xml-for-google'); ?></a></p>
                 </div>
 
