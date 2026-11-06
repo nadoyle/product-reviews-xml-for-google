@@ -3,7 +3,7 @@ Contributors: tetherties
 Tags: woocommerce, google merchant center, product reviews, xml feed, google shopping
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 2.0.3
+Stable tag: 2.0.4
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -47,14 +47,18 @@ Go to the plugin settings and click "Save Changes". This will flush your permali
 
 == Changelog ==
 
+= 2.0.4 =
+*   Added "Copy URL" button for easier setup.
+*   Added step-by-step connection instructions for Google Merchant Center.
+
 = 2.0.3 =
 *   Updated default feed slug.
 *   Updated default refresh rate to Weekly.
 
 = 2.0.0 =
 *   Full security hardening (Nonce checks, Directory hardening).
-*   Added proper uninstaller (Clean database on deletion).
-*   Performance improvements (Conditional Admin loading).
+*   Added proper uninstaller.
+*   Performance improvements.
 *   Trademark-safe slug update.
 
 = 1.0.0 =

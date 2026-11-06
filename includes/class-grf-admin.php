@@ -37,7 +37,6 @@ class GRF_Admin {
 
     public function sanitize_slug($input) {
         $new_slug = preg_replace('/[^a-z0-9\.\-\_]/i', '', $input);
-        // Correct Slug
         return $new_slug ?: 'google-merchant-center-reviews-xml';
     }
 
@@ -50,7 +49,6 @@ class GRF_Admin {
     }
 
     public function settings_page() {
-        // Correct Slug
         $slug = get_option('grf_feed_slug', 'google-merchant-center-reviews-xml');
         $feed_url = site_url('/' . $slug);
         
@@ -69,15 +67,37 @@ class GRF_Admin {
             <form method="post" action="options.php">
                 <?php settings_fields('grf_options'); ?>
                 
+                <!-- SPONSOR CARD -->
                 <div class="card" style="max-width: 800px; padding: 20px; margin-bottom: 20px; border-left: 4px solid #ff9900; background: #fffdf8;">
                     <h3 style="margin-top:0;"><?php _e('🔌 Brought to you by TetherTies', 'product-reviews-xml-for-google'); ?></h3>
                     <p><?php _e('This plugin is free, maintained by the team at <strong>TetherTies</strong>.', 'product-reviews-xml-for-google'); ?></p>
                     <p><a href="https://tetherties.com/?utm_source=plugin&utm_medium=admin_banner" target="_blank" class="button button-secondary"><?php _e('Visit TetherTies.com', 'product-reviews-xml-for-google'); ?></a></p>
                 </div>
 
+                <!-- LIVE FEED URL CARD -->
                 <div class="card" style="max-width: 800px; padding: 20px; margin-bottom: 20px; border-left: 4px solid #2271b1;">
                     <h3 style="margin-top:0;"><?php _e('✅ Your Live Feed URL', 'product-reviews-xml-for-google'); ?></h3>
-                    <code><a href="<?php echo esc_url($feed_url); ?>" target="_blank" style="font-size: 1.2em; font-weight: bold;"><?php echo esc_url($feed_url); ?></a></code>
+                    <div style="display: flex; gap: 10px; align-items: center; background: #f0f0f1; padding: 10px; border-radius: 5px; border: 1px solid #c3c4c7;">
+                        <code id="grf_url_text" style="flex-grow: 1; font-size: 1.2em; background: transparent;"><?php echo esc_url($feed_url); ?></code>
+                        <button type="button" id="grf_copy_btn" class="button button-small"><?php _e('Copy URL', 'product-reviews-xml-for-google'); ?></button>
+                    </div>
+                </div>
+
+                <!-- INSTRUCTIONS CARD -->
+                <div class="card" style="max-width: 800px; padding: 20px; margin-bottom: 20px; border-left: 4px solid #46b450;">
+                    <h3 style="margin-top:0;"><?php _e('🚀 How to Connect to Google', 'product-reviews-xml-for-google'); ?></h3>
+                    <ol style="line-height: 1.6em;">
+                        <li>
+                            <?php printf(
+                                __('Login to Google Merchant Center, then go to this link: %s', 'product-reviews-xml-for-google'),
+                                '<a href="https://merchants.google.com/mc/products/sources" target="_blank" style="font-weight:bold;">https://merchants.google.com/mc/products/sources <span class="dashicons dashicons-external"></span></a>'
+                            ); ?>
+                        </li>
+                        <li><?php _e('Once there, click the <strong>Product review sources</strong> tab.', 'product-reviews-xml-for-google'); ?></li>
+                        <li><?php _e('Click the <strong>Add product reviews</strong> button.', 'product-reviews-xml-for-google'); ?></li>
+                        <li><?php _e('Select "Add product reviews from a file" or "Scheduled Fetch".', 'product-reviews-xml-for-google'); ?></li>
+                        <li><?php _e('Paste the XML link from the box above into the <strong>"Enter a link to your file"</strong> box, and click continue.', 'product-reviews-xml-for-google'); ?></li>
+                    </ol>
                 </div>
 
                 <table class="form-table">
@@ -93,7 +113,6 @@ class GRF_Admin {
                         </select></td></tr>
                     <tr valign="top"><th scope="row"><?php _e('Refresh Rate', 'product-reviews-xml-for-google'); ?></th>
                         <td><select name="grf_refresh_rate">
-                            <!-- WEEKLY DEFAULT -->
                             <option value="604800" <?php selected($current_refresh, 604800); ?>><?php _e('Weekly (Recommended)', 'product-reviews-xml-for-google'); ?></option>
                             <option value="86400" <?php selected($current_refresh, 86400); ?>><?php _e('Daily', 'product-reviews-xml-for-google'); ?></option>
                             <option value="3600" <?php selected($current_refresh, 3600); ?>><?php _e('Hourly', 'product-reviews-xml-for-google'); ?></option>
@@ -107,7 +126,43 @@ class GRF_Admin {
                 </table>
                 <?php submit_button(); ?>
             </form>
+
+            <hr>
+            <h3><?php _e('Manual Actions', 'product-reviews-xml-for-google'); ?></h3>
+            <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+                <input type="hidden" name="action" value="grf_clear_cache">
+                <?php wp_nonce_field('grf_clear_cache_action', 'grf_nonce_field'); ?>
+                <button type="submit" class="button button-secondary"><?php _e('Clear Feed Cache Now', 'product-reviews-xml-for-google'); ?></button>
+            </form>
         </div>
+
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var btn = document.getElementById('grf_copy_btn');
+            var text = document.getElementById('grf_url_text');
+            
+            if(btn && text) {
+                btn.addEventListener('click', function() {
+                    var range = document.createRange();
+                    range.selectNode(text);
+                    window.getSelection().removeAllRanges();
+                    window.getSelection().addRange(range);
+                    
+                    try {
+                        document.execCommand('copy');
+                        var originalText = btn.textContent;
+                        btn.textContent = '<?php _e("Copied!", "product-reviews-xml-for-google"); ?>';
+                        setTimeout(function(){
+                            btn.textContent = originalText;
+                        }, 2000);
+                    } catch(err) {
+                        console.error('Unable to copy');
+                    }
+                    window.getSelection().removeAllRanges();
+                });
+            }
+        });
+        </script>
         <?php
     }
 }
