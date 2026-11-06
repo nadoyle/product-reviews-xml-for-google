@@ -70,11 +70,20 @@ abstract class PRXML_Provider {
             }
         }
         
-        // Get GTIN and MPN from meta
+        // Get GTIN: use the configured meta key if it holds a value,
+        // otherwise fall back to WooCommerce's native field. WC 9.2+
+        // stores GTIN/UPC/EAN/ISBN in the _global_unique_id meta key and
+        // exposes it via get_global_unique_id().
+        $gtin = '';
         if ($this->gtin_key) {
             $gtin = get_post_meta($product_id, $this->gtin_key, true);
-            $data['gtin'] = $gtin ?: '';
         }
+        if (empty($gtin) && method_exists($product, 'get_global_unique_id')) {
+            $gtin = $product->get_global_unique_id();
+        }
+        $data['gtin'] = $gtin ?: '';
+
+        // Get MPN from meta (WooCommerce has no native MPN field)
         if ($this->mpn_key) {
             $mpn = get_post_meta($product_id, $this->mpn_key, true);
             $data['mpn'] = $mpn ?: '';
