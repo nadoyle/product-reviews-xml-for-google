@@ -2,8 +2,8 @@
 Contributors: tetherties
 Tags: woocommerce, google merchant center, product reviews, xml feed, google shopping
 Requires at least: 5.0
-Tested up to: 6.9
-Stable tag: 2.0.8
+Tested up to: 7.0
+Stable tag: 2.0.9
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -53,6 +53,10 @@ Go to the plugin settings and click "Save Changes". This will flush your permali
 
 == Changelog ==
 
+= 2.0.9 =
+*   Tested and confirmed compatible with WordPress 7.0.
+*   Updated "Tested up to" to 7.0.
+
 = 2.0.8 =
 *   Fixed sanitization to use sanitize_title_with_dashes() as recommended by WordPress.org review.
 *   Improved DONOTCACHEPAGE constant scoping to only affect feed rendering.
@@ -86,6 +90,9 @@ Go to the plugin settings and click "Save Changes". This will flush your permali
 *   Initial release.
 
 == Upgrade Notice ==
+
+= 2.0.9 =
+Confirmed compatible with WordPress 7.0.
 
 = 2.0.6 =
 Increased default review limit to 2,500 for better free tier support.
