@@ -3,7 +3,8 @@ if (!defined('ABSPATH')) exit;
 
 class GRF_Provider_SiteReviews extends GRF_Provider {
     public function get_reviews() {
-        $limit = apply_filters('grf_review_limit', 50);
+        // Generous Safety Limit: 2500 reviews.
+        $limit = apply_filters('grf_review_limit', 2500);
         $posts_per_page = ($limit === 0) ? -1 : $limit;
 
         $args = [
