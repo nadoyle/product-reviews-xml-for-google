@@ -50,6 +50,32 @@ We natively support:
 = Where do I enter a GTIN for my products? =
 On WooCommerce 9.2 and later, edit a product and open the Inventory tab. The "GTIN, UPC, EAN, or ISBN" field is read automatically. On older versions, or if you store GTINs in a custom field, enter that meta key in the plugin settings.
 
+= Why does Merchant Center say my reviews have a missing or invalid product ID? =
+Google matches each review to a product in your product feed using a GTIN, or a brand plus an MPN. A review that carries neither cannot be matched, and the whole feed shows errors. Check three things:
+
+1. Open your feed URL and look inside one review's `<product_ids>` block. You should see `<gtins>` or `<mpns>`, plus `<brands>`.
+2. Compare those values with the same product in your Merchant Center product feed (Products, then the product). The GTIN or the MPN has to be identical.
+3. Set the GTIN Key and MPN Key in the plugin settings to the fields that hold those values in your store.
+
+= My products have variations. What does the plugin send? =
+Google's product feed usually lists each variation as its own product, with its own ID, SKU and GTIN, while customers review the parent product. From version 2.1.0 the plugin sends the ID, SKU, MPN and GTIN of every variation inside the review for the parent product, so the review matches whichever variation Google lists. The feed is longer as a result; a product with 22 variations adds about 22 entries per list. To turn this off, return false from the `prxml_include_variations` filter.
+
+= What should I enter for GTIN Key and MPN Key? =
+GTIN Key is the name of the custom field that holds the GTIN. WooCommerce 9.2 and later has a built-in GTIN field that the plugin reads when this key is empty. Many GTIN plugins store the value under their own key, and variations often use a different key from simple products. To find yours, take one GTIN from your Merchant Center product feed and search the `wp_postmeta` table for it: `SELECT post_id, meta_key FROM wp_postmeta WHERE meta_value = 'YOUR-GTIN';`. The `meta_key` in the result is the value to enter. One example is `hwp_var_gtin`, which one GTIN plugin uses on variations.
+
+MPN Key works the same way. If your product feed uses the SKU as the MPN, enter `_sku`. Variations with no value under that key fall back to their own SKU.
+
+Brand Key is the name of a product attribute or custom field. If it is empty or the field has no value, the plugin sends your site name as the brand.
+
+= I changed a setting but the feed looks the same. =
+The plugin stores the generated feed and refreshes it weekly or daily, depending on your setting. Changing the provider, GTIN Key, MPN Key or Brand Key clears that stored copy. If you changed anything else, such as reviews, product data or the plugin files, click "Clear Feed Cache Now" on the settings page. Hosts and CDNs can also keep their own copy of the page: on WP Engine, clear all caches in the User Portal, and on Cloudflare purge the feed URL. Add a throwaway query string such as `?x=1` to the feed URL to bypass your browser's copy while testing. Then use "Fetch now" on the feed in Merchant Center.
+
+= Merchant Center rejects some reviews for containing a URL. =
+Google refuses reviews whose text contains a web address, including bare domains such as example.com. Edit the review in WooCommerce under Products, Reviews, remove the address, and clear the feed cache. Merchant Center's "View examples" link on the error lists the affected reviews.
+
+= Some reviews are for products that are not in my Merchant Center product feed. =
+A review can only show stars on a product Google already has. Reviews on products that are not in your product feed, such as a sample package or a custom order page, will keep showing errors. They do not stop the other reviews from being used.
+
 = My feed is showing a 404 error? =
 Go to the plugin settings and click "Save Changes". This will flush your permalinks and fix the URL.
 
@@ -60,6 +86,7 @@ Go to the plugin settings and click "Save Changes". This will flush your permali
 == Changelog ==
 
 = 2.1.0 =
+*   Added a troubleshooting section to the FAQ and help text under the identifier fields on the settings page.
 *   Added a fallback to WooCommerce's built-in GTIN, UPC, EAN or ISBN field (WooCommerce 9.2 and later) when the configured GTIN meta key is empty, so more reviews match products in Merchant Center.
 *   Reviews on variable products now list the ID, SKU, MPN and GTIN of every variation, so they match the variation-level rows in a Merchant Center product feed. A filter, `prxml_include_variations`, turns this off.
 *   Tested up to WordPress 7.1.

@@ -174,15 +174,18 @@ class PRXML_Admin {
                     </tr>
                     <tr valign="top">
                         <th scope="row"><?php esc_html_e('GTIN Key', 'product-reviews-xml-for-google'); ?></th>
-                        <td><input type="text" name="prxml_gtin_key" value="<?php echo esc_attr(get_option('prxml_gtin_key', '_gtin')); ?>" class="regular-text" /></td>
+                        <td><input type="text" name="prxml_gtin_key" value="<?php echo esc_attr(get_option('prxml_gtin_key', '_gtin')); ?>" class="regular-text" />
+                            <p class="description"><?php esc_html_e('Custom field that holds the GTIN. Leave a value here and the plugin also falls back to the WooCommerce GTIN field. To find the field name, search the wp_postmeta table for one GTIN from your Merchant Center product feed. Variations often use a different field from simple products.', 'product-reviews-xml-for-google'); ?></p></td>
                     </tr>
                     <tr valign="top">
                         <th scope="row"><?php esc_html_e('MPN Key', 'product-reviews-xml-for-google'); ?></th>
-                        <td><input type="text" name="prxml_mpn_key" value="<?php echo esc_attr(get_option('prxml_mpn_key', '_mpn')); ?>" class="regular-text" /></td>
+                        <td><input type="text" name="prxml_mpn_key" value="<?php echo esc_attr(get_option('prxml_mpn_key', '_mpn')); ?>" class="regular-text" />
+                            <p class="description"><?php esc_html_e('Custom field that holds the MPN. Enter _sku if your product feed uses the SKU as the MPN. Variations with no value fall back to their own SKU.', 'product-reviews-xml-for-google'); ?></p></td>
                     </tr>
                     <tr valign="top">
                         <th scope="row"><?php esc_html_e('Brand Key', 'product-reviews-xml-for-google'); ?></th>
-                        <td><input type="text" name="prxml_brand_key" value="<?php echo esc_attr(get_option('prxml_brand_key', 'brand')); ?>" class="regular-text" /></td>
+                        <td><input type="text" name="prxml_brand_key" value="<?php echo esc_attr(get_option('prxml_brand_key', 'brand')); ?>" class="regular-text" />
+                            <p class="description"><?php esc_html_e('Product attribute or custom field that holds the brand. When it is empty, the plugin sends your site name.', 'product-reviews-xml-for-google'); ?></p></td>
                     </tr>
                 </table>
                 <?php submit_button(); ?>
@@ -195,6 +198,7 @@ class PRXML_Admin {
                 <?php wp_nonce_field('prxml_clear_cache_action', 'prxml_nonce_field'); ?>
                 <button type="submit" class="button button-secondary"><?php esc_html_e('Clear Feed Cache Now', 'product-reviews-xml-for-google'); ?></button>
             </form>
+            <p class="description"><?php esc_html_e('The feed is stored between refreshes. Clear it after changing reviews or product data. If the feed still looks old, also clear your host or CDN cache, and add ?x=1 to the feed URL when testing.', 'product-reviews-xml-for-google'); ?></p>
         </div>
         <?php
     }
