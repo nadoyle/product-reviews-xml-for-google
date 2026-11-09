@@ -43,6 +43,21 @@ abstract class PRXML_Provider {
      * @return array|false Product data array or false on failure
      */
     protected function get_product_identifiers($product_id) {
+        static $memo = [];
+        if (isset($memo[$product_id])) {
+            return $memo[$product_id];
+        }
+        $memo[$product_id] = $this->build_product_identifiers($product_id);
+        return $memo[$product_id];
+    }
+
+    /**
+     * Build the identifier set for one product (memoized by the caller)
+     *
+     * @param int $product_id WooCommerce product ID
+     * @return array|false
+     */
+    private function build_product_identifiers($product_id) {
         $product = wc_get_product($product_id);
         
         // Strict type checking for WC_Product
@@ -87,6 +102,52 @@ abstract class PRXML_Provider {
         if ($this->mpn_key) {
             $mpn = get_post_meta($product_id, $this->mpn_key, true);
             $data['mpn'] = $mpn ?: '';
+        }
+
+        // Merge in identifiers from variations so reviews on a variable
+        // product match the variation-level rows in a Merchant Center
+        // product feed.
+        $lists = [
+            'gtins' => $data['gtin'] !== '' ? [$data['gtin']] : [],
+            'mpns'  => $data['mpn'] !== '' ? [$data['mpn']] : [],
+            'skus'  => $data['sku'] !== '' ? [$data['sku']] : [],
+        ];
+
+        if ($product->is_type('variable') && apply_filters('prxml_include_variations', true, $product)) {
+            foreach ($product->get_children() as $variation_id) {
+                $variation = wc_get_product($variation_id);
+                if (!$variation || !is_a($variation, 'WC_Product')) {
+                    continue;
+                }
+
+                $lists['skus'][] = (string) $variation_id;
+                if ($variation->get_sku()) {
+                    $lists['skus'][] = $variation->get_sku();
+                }
+
+                $v_gtin = '';
+                if ($this->gtin_key) {
+                    $v_gtin = get_post_meta($variation_id, $this->gtin_key, true);
+                }
+                if (empty($v_gtin) && method_exists($variation, 'get_global_unique_id')) {
+                    $v_gtin = $variation->get_global_unique_id();
+                }
+                if ($v_gtin) {
+                    $lists['gtins'][] = $v_gtin;
+                }
+
+                $v_mpn = $this->mpn_key ? get_post_meta($variation_id, $this->mpn_key, true) : '';
+                if (!$v_mpn && $variation->get_sku()) {
+                    $v_mpn = $variation->get_sku();
+                }
+                if ($v_mpn) {
+                    $lists['mpns'][] = $v_mpn;
+                }
+            }
+        }
+
+        foreach ($lists as $key => $values) {
+            $data[$key] = array_values(array_unique(array_map('strval', $values)));
         }
 
         return $data;

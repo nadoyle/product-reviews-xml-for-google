@@ -61,6 +61,7 @@ Go to the plugin settings and click "Save Changes". This will flush your permali
 
 = 2.1.0 =
 *   Added a fallback to WooCommerce's built-in GTIN, UPC, EAN or ISBN field (WooCommerce 9.2 and later) when the configured GTIN meta key is empty, so more reviews match products in Merchant Center.
+*   Reviews on variable products now list the ID, SKU, MPN and GTIN of every variation, so they match the variation-level rows in a Merchant Center product feed. A filter, `prxml_include_variations`, turns this off.
 *   Tested up to WordPress 7.1.
 *   Added a GTIN question to the FAQ.
 
@@ -103,7 +104,7 @@ Go to the plugin settings and click "Save Changes". This will flush your permali
 == Upgrade Notice ==
 
 = 2.1.0 =
-Reads WooCommerce's built-in GTIN field when no GTIN meta key is set. No settings changes needed.
+Reads WooCommerce's built-in GTIN field when no GTIN meta key is set, and lists every variation's identifiers on reviews of variable products. No settings changes needed. The feed cache clears when you save settings, or use Clear Cache after updating.
 
 = 2.0.9 =
 Confirmed compatible with WordPress 7.0.

@@ -30,7 +30,7 @@ uninstall.php                        removes options and cached feed
 
 ## History
 
-Each release commit is one version, up to 2.1.0. The 2.0.8 commit holds the round of fixes from the WordPress.org plugin review: the `grf` prefix became `prxml`, inline JavaScript moved to an enqueued file, and sanitization and escaping were tightened. Version 2.1.0 adds a fallback to WooCommerce's native GTIN field.
+Each release commit is one version, up to 2.1.0. The 2.0.8 commit holds the round of fixes from the WordPress.org plugin review: the `grf` prefix became `prxml`, inline JavaScript moved to an enqueued file, and sanitization and escaping were tightened. Version 2.1.0 adds a fallback to WooCommerce's native GTIN field and lists every variation's identifiers on reviews of variable products.
 
 ## License
 

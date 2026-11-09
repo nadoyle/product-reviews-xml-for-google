@@ -119,9 +119,9 @@ class PRXML_Feed {
             <products>
                 <product>
                     <product_ids>
-                        <?php if (!empty($r['identifiers']['gtin'])): ?><gtins><gtin><?php echo esc_html($r['identifiers']['gtin']); ?></gtin></gtins><?php endif; ?>
-                        <?php if (!empty($r['identifiers']['mpn'])): ?><mpns><mpn><?php echo esc_html($r['identifiers']['mpn']); ?></mpn></mpns><?php endif; ?>
-                        <?php if (!empty($r['identifiers']['sku'])): ?><skus><sku><?php echo esc_html($r['identifiers']['sku']); ?></sku></skus><?php endif; ?>
+                        <?php foreach (['gtins' => 'gtin', 'mpns' => 'mpn', 'skus' => 'sku'] as $list => $tag): ?>
+                        <?php if (!empty($r['identifiers'][$list])): ?><<?php echo $tag; ?>s><?php foreach ($r['identifiers'][$list] as $value): ?><<?php echo $tag; ?>><?php echo esc_html($value); ?></<?php echo $tag; ?>><?php endforeach; ?></<?php echo $tag; ?>s><?php endif; ?>
+                        <?php endforeach; ?>
                         <brands><brand><?php echo esc_html($r['identifiers']['brand']); ?></brand></brands>
                     </product_ids>
                     <product_name><?php echo esc_html($r['product_name']); ?></product_name>

@@ -49,6 +49,9 @@ class PRXML_Provider_SiteReviews extends PRXML_Provider {
                     'brand' => $product_data['brand'],
                     'gtin' => $product_data['gtin'],
                     'mpn' => $product_data['mpn'],
+                    'gtins' => $product_data['gtins'],
+                    'mpns' => $product_data['mpns'],
+                    'skus' => $product_data['skus'],
                 ],
             ];
         }
