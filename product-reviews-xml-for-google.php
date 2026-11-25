@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Product Reviews XML for Google Merchant Center
  * Description: Generates a Google Merchant Center XML feed for WooCommerce reviews. Supports standard Woo reviews, YITH, Judge.me, Yotpo, and more.
- * Version: 2.1.0
+ * Version: 2.1.1
  * Author: TetherTies, LLC
  * Author URI: https://tetherties.com
  * Text Domain: product-reviews-xml-for-google
@@ -11,14 +11,14 @@
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  * Requires at least: 5.0
  * Requires PHP: 7.2
- * Tested up to: 7.1
+ * Tested up to: 7.2
  * Requires Plugins: woocommerce
  */
 
 if (!defined('ABSPATH')) exit;
 
 define('PRXML_PATH', plugin_dir_path(__FILE__));
-define('PRXML_VERSION', '2.1.0');
+define('PRXML_VERSION', '2.1.1');
 
 /**
  * Check if WooCommerce is active
@@ -58,6 +58,12 @@ function prxml_woocommerce_missing_notice() {
 function prxml_init() {
     if (!prxml_check_woocommerce()) {
         return;
+    }
+
+    // A plugin update must not keep serving XML built by the old version.
+    if (get_option('prxml_version') !== PRXML_VERSION) {
+        delete_transient('prxml_xml_feed_cache');
+        update_option('prxml_version', PRXML_VERSION);
     }
 
     require_once PRXML_PATH . 'includes/class-prxml-feed.php';

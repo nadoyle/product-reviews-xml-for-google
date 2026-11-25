@@ -16,5 +16,6 @@ delete_option('prxml_refresh_rate');
 delete_option('prxml_gtin_key');
 delete_option('prxml_mpn_key');
 delete_option('prxml_brand_key');
+delete_option('prxml_version');
 
 delete_transient('prxml_xml_feed_cache');

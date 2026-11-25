@@ -2,8 +2,8 @@
 Contributors: tetherties
 Tags: woocommerce, google merchant center, product reviews, xml feed, google shopping
 Requires at least: 5.0
-Tested up to: 7.1
-Stable tag: 2.1.0
+Tested up to: 7.2
+Stable tag: 2.1.1
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -85,6 +85,14 @@ Go to the plugin settings and click "Save Changes". This will flush your permali
 
 == Changelog ==
 
+= 2.1.1 =
+*   Fixed the name element for the aggregator, publisher and reviewer so it follows Google's product review feed schema.
+*   Fixed an old feed staying cached after the first change to the review source or an identifier key.
+*   Fixed a 404 on the feed after changing the URL slug from its default.
+*   Fixed the path to the script behind the Copy URL button.
+*   The stored feed is now cleared when the plugin version changes.
+*   Tested up to WordPress 7.2.
+
 = 2.1.0 =
 *   Added a troubleshooting section to the FAQ and help text under the identifier fields on the settings page.
 *   Added a fallback to WooCommerce's built-in GTIN, UPC, EAN or ISBN field (WooCommerce 9.2 and later) when the configured GTIN meta key is empty, so more reviews match products in Merchant Center.
@@ -129,6 +137,9 @@ Go to the plugin settings and click "Save Changes". This will flush your permali
 *   Initial release.
 
 == Upgrade Notice ==
+
+= 2.1.1 =
+Fixes name tags that did not follow Google's review feed schema. The stored feed clears on update. Clear any host or CDN cache, then fetch the feed again in Merchant Center.
 
 = 2.1.0 =
 Reads WooCommerce's built-in GTIN field when no GTIN meta key is set, and lists every variation's identifiers on reviews of variable products. No settings changes needed. The feed cache clears when you save settings, or use Clear Cache after updating.

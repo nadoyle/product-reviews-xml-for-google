@@ -6,11 +6,14 @@ class PRXML_Admin {
         add_action('admin_menu', [$this, 'menu']);
         add_action('admin_init', [$this, 'register_settings']);
         add_action('admin_enqueue_scripts', [$this, 'enqueue_scripts']); 
-        add_action('update_option_prxml_feed_slug', [$this, 'flush_rewrites_on_change'], 10, 2);
-        add_action('update_option_prxml_provider', [$this, 'clear_cache_on_setting_change']);
-        add_action('update_option_prxml_gtin_key', [$this, 'clear_cache_on_setting_change']);
-        add_action('update_option_prxml_mpn_key', [$this, 'clear_cache_on_setting_change']);
-        add_action('update_option_prxml_brand_key', [$this, 'clear_cache_on_setting_change']);
+        // WordPress calls add_option() instead of update_option() when the old value
+        // equals the registered default, so listen for both.
+        foreach (['add_option_', 'update_option_'] as $prefix) {
+            add_action($prefix . 'prxml_feed_slug', [$this, 'flush_rewrites_on_change']);
+            foreach (['prxml_provider', 'prxml_gtin_key', 'prxml_mpn_key', 'prxml_brand_key'] as $option) {
+                add_action($prefix . $option, [$this, 'clear_cache_on_setting_change']);
+            }
+        }
         add_action('admin_post_prxml_clear_cache', [$this, 'process_clear_cache']);
     }
 
@@ -21,7 +24,7 @@ class PRXML_Admin {
         
         wp_enqueue_script(
             'prxml-admin-js',
-            plugins_url('../assets/js/admin.js', dirname(__FILE__)), 
+            plugins_url('assets/js/admin.js', PRXML_PATH . 'product-reviews-xml-for-google.php'),
             [],
             PRXML_VERSION,
             true
@@ -32,14 +35,10 @@ class PRXML_Admin {
         ]);
     }
 
-    public function flush_rewrites_on_change($old_value, $new_value) {
-        if ($old_value !== $new_value) {
-            if (class_exists('PRXML_Feed')) { 
-                $feed = new PRXML_Feed(); 
-                $feed->rewrite(); 
-            }
-            flush_rewrite_rules();
-        }
+    public function flush_rewrites_on_change() {
+        // Drop the saved rules so WordPress rebuilds them on the next request,
+        // after init has registered only the new slug.
+        delete_option('rewrite_rules');
     }
 
     public function clear_cache_on_setting_change() {

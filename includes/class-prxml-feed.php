@@ -68,7 +68,7 @@ class PRXML_Feed {
             // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- XML content is pre-escaped during generation
             echo $xml;
         } else {
-            echo '<?xml version="1.0" encoding="' . esc_attr($charset) . '"?><e>Failed to generate feed</e>';
+            echo '<?xml version="1.0" encoding="' . esc_attr($charset) . '"?><error>Failed to generate feed</error>';
         }
         exit;
     }
@@ -105,13 +105,13 @@ class PRXML_Feed {
             ?>
 <feed xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" xmlns:p="http://base.google.com/ns/1.0" name="<?php echo esc_attr(get_bloginfo('name')); ?> Product Reviews">
     <version>2.3</version>
-    <aggregator><n>WooCommerce</n></aggregator>
-    <publisher><n><?php echo esc_html(get_bloginfo('name')); ?></n></publisher>
+    <aggregator><name>WooCommerce</name></aggregator>
+    <publisher><name><?php echo esc_html(get_bloginfo('name')); ?></name></publisher>
     <reviews>
         <?php foreach ($reviews as $r): ?>
         <review>
             <review_id><?php echo esc_html($r['id']); ?></review_id>
-            <reviewer><n><?php echo esc_html($r['reviewer_name']); ?></n></reviewer>
+            <reviewer><name><?php echo esc_html($r['reviewer_name']); ?></name></reviewer>
             <review_timestamp><?php echo esc_html($r['timestamp']); ?></review_timestamp>
             <content><?php echo esc_html($r['content']); ?></content>
             <review_url type="singleton"><?php echo esc_url($r['url']); ?></review_url>
